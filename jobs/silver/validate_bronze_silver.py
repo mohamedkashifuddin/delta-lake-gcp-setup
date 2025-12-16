@@ -14,5 +14,5 @@ tables = [
 for table in tables:
     count = spark.sql(f"SELECT COUNT(*) as cnt FROM {table}").collect()[0]['cnt']
     print(f"✅ {table}: {count} rows (expected: 0)")
-
+spark.sql("SHOW TABLES IN silver").show()
 spark.stop()

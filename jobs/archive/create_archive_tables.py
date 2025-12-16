@@ -82,5 +82,7 @@ print("\n📊 Archive table schema (all 3 have same schema and NOT NULL constrai
 spark.read.format("delta") \
     .load("gs://delta-lake-payment-gateway-476820/metadata/bronze_job_control_archive") \
     .printSchema()
-
+spark.sql("SHOW TABLES IN bronze").show()    
+spark.sql("SHOW TABLES IN silver").show()    
+spark.sql("SHOW TABLES IN gold").show()
 spark.stop()

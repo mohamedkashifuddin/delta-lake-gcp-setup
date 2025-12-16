@@ -72,5 +72,5 @@ print(f"✅ Created: {table_name}")
 # --- Validation ---
 print("\n--- Validating Created Table ---")
 spark.read.format("delta").load(delta_path).printSchema()
-
+spark.sql("SHOW TABLES IN bronze").show()
 spark.stop()

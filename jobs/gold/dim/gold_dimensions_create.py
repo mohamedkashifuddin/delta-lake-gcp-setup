@@ -23,7 +23,10 @@ DIM_CUSTOMER_DDL = """
     last_transaction_date DATE,
     lifetime_value DOUBLE,
     loaded_at TIMESTAMP,
-    source_system STRING
+    source_system STRING,
+    effective_start_date DATE,
+    effective_end_date DATE,
+    is_current BOOLEAN
 )
 """
 
@@ -36,7 +39,10 @@ DIM_MERCHANT_DDL = """
     category STRING,
     location_type STRING,
     loaded_at TIMESTAMP,
-    source_system STRING
+    source_system STRING,
+    effective_start_date DATE,
+    effective_end_date DATE,
+    is_current BOOLEAN
 )
 """
 

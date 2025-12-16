@@ -115,6 +115,49 @@ OPTIONS (
   format = 'DELTA_LAKE',
   uris = ['gs://delta-lake-payment-gateway-476820/metadata/gold_job_control']
 );"
+-- 1. GOLD FACT TRANSACTIONS STAGING
+CREATE EXTERNAL TABLE gold_dataset.fact_transactions_staging
+WITH CONNECTION grand-jigsaw-476820-t1.us-central1.delta_biglake_connection
+OPTIONS (
+format = 'DELTA_LAKE',
+uris = ['gs://delta-lake-payment-gateway-476820/gold/fact_transactions_staging']
+);
 
-echo "✅ Gold external tables created (7)"
-echo "✅ Total external tables: 13 (3 bronze + 3 silver + 7 gold)"
+-- 2. GOLD CUSTOMER DIMENSION STAGING
+CREATE EXTERNAL TABLE gold_dataset.dim_customer_staging
+WITH CONNECTION grand-jigsaw-476820-t1.us-central1.delta_biglake_connection
+OPTIONS (
+format = 'DELTA_LAKE',
+uris = ['gs://delta-lake-payment-gateway-476820/gold/dim_customer_staging']
+);
+
+-- 3. GOLD MERCHANT DIMENSION STAGING
+CREATE EXTERNAL TABLE gold_dataset.dim_merchant_staging
+WITH CONNECTION grand-jigsaw-476820-t1.us-central1.delta_biglake_connection
+OPTIONS (
+format = 'DELTA_LAKE',
+uris = ['gs://delta-lake-payment-gateway-476820/gold/dim_merchant_staging']
+);
+
+-- 4. GOLD PAYMENT METHOD DIMENSION STAGING
+-- NOTE: We are assuming this DDL was previously run in Spark to create the Delta path.
+CREATE EXTERNAL TABLE gold_dataset.dim_payment_method_staging
+WITH CONNECTION grand-jigsaw-476820-t1.us-central1.delta_biglake_connection
+OPTIONS (
+format = 'DELTA_LAKE',
+uris = ['gs://delta-lake-payment-gateway-476820/gold/dim_payment_method_staging']
+);
+
+-- 5. GOLD TRANSACTION STATUS DIMENSION STAGING
+-- NOTE: We are assuming this DDL was previously run in Spark to create the Delta path.
+CREATE EXTERNAL TABLE gold_dataset.dim_transaction_status_staging
+WITH CONNECTION grand-jigsaw-476820-t1.us-central1.delta_biglake_connection
+OPTIONS (
+format = 'DELTA_LAKE',
+uris = ['gs://delta-lake-payment-gateway-476820/gold/dim_transaction_status_staging']
+);
+
+
+
+echo "✅ Gold external tables created (10)"
+echo "✅ Total external tables: 19 (4 bronze + 4 silver + 10 gold)"

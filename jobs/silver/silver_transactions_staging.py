@@ -1,23 +1,22 @@
 from pyspark.sql import SparkSession
-from pyspark.sql.types import *
 
 spark = SparkSession.builder \
-    .appName("Create Bronze Quarantine Table (Final Fix)") \
+    .appName("Create Silver Transactions Staging Table") \
     .config("spark.sql.extensions", "io.delta.sql.DeltaSparkSessionExtension") \
     .config("spark.sql.catalog.spark_catalog", "org.apache.spark.sql.delta.catalog.DeltaCatalog") \
     .getOrCreate()
 
-# Ensure the 'bronze' schema (database) exists
-spark.sql("CREATE SCHEMA IF NOT EXISTS bronze")
+# Ensure the 'silver' schema (database) exists
+spark.sql("CREATE SCHEMA IF NOT EXISTS silver")
 
-# Delta table location
-delta_path = "gs://delta-lake-payment-gateway-476820/quarantine/bronze_transactions"
-table_name = "bronze.quarantine"
+# Delta table location and name
+delta_path = "gs://delta-lake-payment-gateway-476820/silver/transactions_staging"
+table_name = "silver.transactions_staging"
 
-# --- DDL Schema Definition for Bronze Quarantine (FIXED: Renamed change/version columns for BigQuery) ---
-BRONZE_QUARANTINE_DDL = """
+# Schema is identical to silver.transactions
+STAGING_DDL = """
 (
-    transaction_id STRING,
+    transaction_id STRING NOT NULL,
     customer_id STRING,
     transaction_timestamp TIMESTAMP,
     merchant_id STRING,
@@ -35,16 +34,15 @@ BRONZE_QUARANTINE_DDL = """
     currency STRING,
     updated_at TIMESTAMP,
     delta_change_type STRING, 
-    delta_version BIGINT,     
-    error_reason STRING NOT NULL,
-    error_tier STRING,
-    quarantined_at TIMESTAMP NOT NULL,
-    source_file STRING,
-    processing_batch_id STRING
+    delta_version BIGINT,       
+    is_deleted BOOLEAN,
+    deleted_at TIMESTAMP
 )
 """
 
-# --- Explicit GCS Directory Deletion ---
+print(f"Starting creation of staging table: {table_name}...")
+
+# --- Explicit GCS Directory Deletion (Restored as requested) ---
 uri = spark._jvm.java.net.URI(delta_path)
 fs = spark._jvm.org.apache.hadoop.fs.FileSystem.get(uri, spark._jsc.hadoopConfiguration())
 path = spark._jvm.org.apache.hadoop.fs.Path(delta_path)
@@ -54,22 +52,28 @@ if fs.exists(path):
     fs.delete(path, True)
 else:
     print(f"Delta directory for {table_name} does not exist, skipping delete.")
-# ---------------------------------------
+# -------------------------------------------------------------
 
 spark.sql(f"DROP TABLE IF EXISTS {table_name}")
 
-print(f"\nCreating table: {table_name} at {delta_path}")
 spark.sql(f"""
 CREATE TABLE {table_name}
-{BRONZE_QUARANTINE_DDL}
+{STAGING_DDL}
 USING DELTA
 LOCATION '{delta_path}'
 """)
 
-print(f"✅ Bronze quarantine table created at: {delta_path}")
+print(f"✅ Created: {table_name} at {delta_path}")
 
-# --- Validation ---
-print("\n--- Validating Table Creation ---")
-spark.read.format("delta").load(delta_path).printSchema()
+# --- Detailed Validation (Restored/Added as requested) ---
+print("\n--- Validating Created Table Schema ---")
+try:
+    spark.read.format("delta").load(delta_path).printSchema()
+except Exception as e:
+    print(f"❌ Failed to read/validate schema for {table_name}: {e}")
+
+# Request to list all tables after creation
+print("\n--- Current Tables in Metastore (SHOW TABLES) ---")
+# spark.sql("SHOW TABLES IN silver").show()
 
 spark.stop()

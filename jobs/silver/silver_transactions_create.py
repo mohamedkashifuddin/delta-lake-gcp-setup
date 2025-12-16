@@ -35,7 +35,9 @@ TRANSACTIONS_DDL = """
     currency STRING,
     updated_at TIMESTAMP,
     delta_change_type STRING, -- Renamed from _change_type
-    delta_version BIGINT      -- Renamed from _delta_version
+    delta_version BIGINT,      -- Renamed from _delta_version
+    is_deleted BOOLEAN,
+    deleted_at TIMESTAMP
 )
 """
 

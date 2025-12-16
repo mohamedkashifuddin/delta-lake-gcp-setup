@@ -35,7 +35,11 @@ TRANSACTIONS_DDL = """
     currency STRING,
     updated_at TIMESTAMP,
     delta_change_type STRING, 
-    delta_version BIGINT      
+    delta_version BIGINT,
+    is_deleted BOOLEAN,
+    deleted_at TIMESTAMP,
+    is_late_arrival BOOLEAN,
+    arrival_delay_hours INT      
 )
 """
 
