@@ -39,7 +39,9 @@ TRANSACTIONS_DDL = """
     is_deleted BOOLEAN,
     deleted_at TIMESTAMP,
     is_late_arrival BOOLEAN,
-    arrival_delay_hours INT      
+    arrival_delay_hours INT,
+    data_quality_flag STRING,
+    validation_errors STRING
 )
 """
 
