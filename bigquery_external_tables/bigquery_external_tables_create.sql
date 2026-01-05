@@ -85,21 +85,22 @@ OPTIONS (
 );"
 
 bq query --use_legacy_sql=false --project_id=grand-jigsaw-476820-t1 "
-CREATE EXTERNAL TABLE gold_dataset.dim_payment_methods
+CREATE EXTERNAL TABLE gold_dataset.dim_payment_method
 WITH CONNECTION \`grand-jigsaw-476820-t1.us-central1.delta_biglake_connection\`
 OPTIONS (
   format = 'DELTA_LAKE',
-  uris = ['gs://delta-lake-payment-gateway-476820/gold/dim_payment_methods']
-);"
+  uris = ['gs://delta-lake-payment-gateway-476820/gold/dim_payment_method']
+);
+"
 
 bq query --use_legacy_sql=false --project_id=grand-jigsaw-476820-t1 "
-CREATE EXTERNAL TABLE gold_dataset.dim_transaction_status
+CREATE EXTERNAL TABLE gold_dataset.dim_status
 WITH CONNECTION \`grand-jigsaw-476820-t1.us-central1.delta_biglake_connection\`
 OPTIONS (
   format = 'DELTA_LAKE',
-  uris = ['gs://delta-lake-payment-gateway-476820/gold/dim_transaction_status']
-);"
-
+  uris = ['gs://delta-lake-payment-gateway-476820/gold/dim_status']
+);
+"
 bq query --use_legacy_sql=false --project_id=grand-jigsaw-476820-t1 "
 CREATE EXTERNAL TABLE gold_dataset.dim_date
 WITH CONNECTION \`grand-jigsaw-476820-t1.us-central1.delta_biglake_connection\`
