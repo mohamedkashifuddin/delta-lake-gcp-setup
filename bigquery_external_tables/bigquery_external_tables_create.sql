@@ -69,19 +69,19 @@ OPTIONS (
 );"
 
 bq query --use_legacy_sql=false --project_id=grand-jigsaw-476820-t1 "
-CREATE EXTERNAL TABLE gold_dataset.dim_customers
+CREATE EXTERNAL TABLE gold_dataset.dim_customer
 WITH CONNECTION \`grand-jigsaw-476820-t1.us-central1.delta_biglake_connection\`
 OPTIONS (
   format = 'DELTA_LAKE',
-  uris = ['gs://delta-lake-payment-gateway-476820/gold/dim_customers']
+  uris = ['gs://delta-lake-payment-gateway-476820/gold/dim_customer']
 );"
 
 bq query --use_legacy_sql=false --project_id=grand-jigsaw-476820-t1 "
-CREATE EXTERNAL TABLE gold_dataset.dim_merchants
+CREATE EXTERNAL TABLE gold_dataset.dim_merchant
 WITH CONNECTION \`grand-jigsaw-476820-t1.us-central1.delta_biglake_connection\`
 OPTIONS (
   format = 'DELTA_LAKE',
-  uris = ['gs://delta-lake-payment-gateway-476820/gold/dim_merchants']
+  uris = ['gs://delta-lake-payment-gateway-476820/gold/dim_merchant']
 );"
 
 bq query --use_legacy_sql=false --project_id=grand-jigsaw-476820-t1 "
